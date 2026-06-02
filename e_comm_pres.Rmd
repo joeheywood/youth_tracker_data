@@ -1,0 +1,61 @@
+---
+title: "Untitled"
+output: powerpoint_presentation
+date: "2026-05-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(dplyr)
+library(plotly)
+library(tidyr)
+sec_eb <- readRDS("all_data.RDS")
+
+```
+
+## R Markdown
+
+This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+## Slide with Bullets
+
+- Bullet 1
+- Bullet 2
+- Bullet 3
+
+## Slide with R Output
+
+```{r cars, echo = FALSE}
+df <- sec_eb %>% filter(Q %in% c("Q01.1. How interested would you say that you are in the following? - Politics in the UK"),  
+                                 # "Q01.2. How interested would you say that you are in the following? - Politics in my local area" ),
+                        Question %in% c("NET: Interested", "NET: Not Interested" ),
+                        x %in% c("Total", "London")
+                        )
+
+plot_df <- df %>% select(Question, x, prc_calc) %>% 
+  pivot_wider(names_from = x, values_from = prc_calc)
+
+plot_ly(plot_df, type = "bar", x = ~Question, y =~ Total, name = "UK" ) %>% 
+  add_trace(y = ~London, name = "London")
+
+
+df <- sec_eb %>% filter(Q %in% c("Q01.2. How interested would you say that you are in the following? - Politics in my local area" ),
+                        Question %in% c("NET: Interested", "NET: Not Interested" ),
+                        x %in% c("Total", "London")
+                        )
+
+plot_df <- df %>% select(Question, x, prc_calc) %>% 
+  pivot_wider(names_from = x, values_from = prc_calc)
+
+plot_ly(plot_df, type = "bar", x = ~Question, y =~ Total, name = "UK" ) %>% 
+  add_trace(y = ~London, name = "London")
+```
+
+## Slide with Plot
+
+```{r pressure}
+plot(pressure)
+```
+
